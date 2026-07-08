@@ -528,14 +528,61 @@ function showToast(message) {
 const STORAGE_KEY = 'lingxi_user';
 const adConfig = { duration: 30, enabled: true, memberLevel: '月卡及以上' };
 
-// DeepSeek AI 配置
+// 大模型 AI 配置（默认 DeepSeek 启用）
+const AI_PROVIDERS = {
+    deepseek: {
+        name: 'DeepSeek',
+        endpoint: 'https://api.deepseek.com/v1/chat/completions',
+        defaultModel: 'deepseek-chat'
+    },
+    openai: {
+        name: 'OpenAI',
+        endpoint: 'https://api.openai.com/v1/chat/completions',
+        defaultModel: 'gpt-4o'
+    },
+    qwen: {
+        name: '通义千问',
+        endpoint: 'https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions',
+        defaultModel: 'qwen-max'
+    },
+    zhipu: {
+        name: '智谱 AI',
+        endpoint: 'https://open.bigmodel.cn/api/paas/v4/chat/completions',
+        defaultModel: 'glm-4'
+    },
+    moonshot: {
+        name: '月之暗面',
+        endpoint: 'https://api.moonshot.cn/v1/chat/completions',
+        defaultModel: 'moonshot-v1-8k'
+    },
+    custom: {
+        name: '自定义',
+        endpoint: '',
+        defaultModel: ''
+    }
+};
+
 const aiConfig = {
+    provider: 'deepseek',
     apiKey: '',
     endpoint: 'https://api.deepseek.com/v1/chat/completions',
     model: 'deepseek-chat',
-    enabled: false,
+    enabled: true,
+    maxTokens: 1000,
+    temperature: 0.7,
     prompt: ''
 };
+
+function onAIProviderChange() {
+    const provider = document.getElementById('admin-ai-provider').value;
+    const p = AI_PROVIDERS[provider];
+    if (p) {
+        const endpointEl = document.getElementById('admin-ai-endpoint');
+        const modelEl = document.getElementById('admin-ai-model');
+        if (endpointEl && !endpointEl.value) endpointEl.value = p.endpoint;
+        if (p.defaultModel && modelEl && !modelEl.value) modelEl.value = p.defaultModel;
+    }
+}
 
 function loadAIConfig() {
     try {
@@ -548,29 +595,39 @@ function loadAIConfig() {
 }
 
 function saveAISettings() {
+    aiConfig.provider = document.getElementById('admin-ai-provider').value;
     aiConfig.apiKey = document.getElementById('admin-ai-apikey').value.trim();
     aiConfig.endpoint = document.getElementById('admin-ai-endpoint').value.trim() || aiConfig.endpoint;
-    aiConfig.model = document.getElementById('admin-ai-model').value;
+    aiConfig.model = document.getElementById('admin-ai-model').value.trim() || aiConfig.model;
     aiConfig.enabled = document.getElementById('admin-ai-enabled').checked;
+    aiConfig.maxTokens = parseInt(document.getElementById('admin-ai-max-tokens').value) || 1000;
+    aiConfig.temperature = parseFloat(document.getElementById('admin-ai-temperature').value) || 0.7;
     aiConfig.prompt = document.getElementById('admin-ai-prompt').value;
     localStorage.setItem('lingxi_ai_config', JSON.stringify(aiConfig));
-    showToast('AI 配置已保存 ✅');
+    const p = AI_PROVIDERS[aiConfig.provider];
+    showToast((p ? p.name : 'AI') + ' 配置已保存 ✅');
 }
 
 function loadAISettingsToUI() {
-    const apikeyEl = document.getElementById('admin-ai-apikey');
-    if (apikeyEl) {
-        apikeyEl.value = aiConfig.apiKey;
-        document.getElementById('admin-ai-endpoint').value = aiConfig.endpoint;
-        document.getElementById('admin-ai-model').value = aiConfig.model;
-        document.getElementById('admin-ai-enabled').checked = aiConfig.enabled;
-        document.getElementById('admin-ai-prompt').value = aiConfig.prompt || document.getElementById('admin-ai-prompt').value;
-    }
+    const providerEl = document.getElementById('admin-ai-provider');
+    if (!providerEl) return;
+    providerEl.value = aiConfig.provider;
+    document.getElementById('admin-ai-apikey').value = aiConfig.apiKey;
+    document.getElementById('admin-ai-endpoint').value = aiConfig.endpoint;
+    document.getElementById('admin-ai-model').value = aiConfig.model;
+    document.getElementById('admin-ai-enabled').checked = aiConfig.enabled;
+    document.getElementById('admin-ai-max-tokens').value = aiConfig.maxTokens;
+    document.getElementById('admin-ai-temperature').value = aiConfig.temperature;
+    document.getElementById('admin-ai-prompt').value = aiConfig.prompt || document.getElementById('admin-ai-prompt').value;
 }
 
 async function testAIConnection() {
     if (!aiConfig.apiKey) {
         showToast('请先填写 API Key');
+        return;
+    }
+    if (!aiConfig.endpoint) {
+        showToast('请先填写 API 地址');
         return;
     }
     showToast('正在测试连接...');
@@ -588,7 +645,8 @@ async function testAIConnection() {
             })
         });
         if (res.ok) {
-            showToast('连接成功！🎉');
+            const p = AI_PROVIDERS[aiConfig.provider];
+            showToast((p ? p.name : 'AI') + ' 连接成功！🎉');
         } else {
             const err = await res.json().catch(() => ({}));
             showToast('连接失败：' + (err.error?.message || res.status));
@@ -645,8 +703,8 @@ async function askAIAnalysis() {
                     { role: 'system', content: '你是一位资深心理咨询师，擅长用温暖、专业的语言解读测评结果。' },
                     { role: 'user', content: prompt }
                 ],
-                temperature: 0.7,
-                max_tokens: 1000
+                temperature: aiConfig.temperature,
+                max_tokens: aiConfig.maxTokens
             })
         });
 
