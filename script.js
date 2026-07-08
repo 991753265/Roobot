@@ -282,6 +282,7 @@ function showAssessmentResult() {
             <div class="result-actions">
                 <button class="result-btn-primary" onclick="unlockDeepReport()">查看深度报告</button>
                 <button class="result-btn-ad" onclick="watchAdForResult()">看广告免费看</button>
+                <button class="result-btn-ai" onclick="askAIAnalysis()">🤖 AI智能分析</button>
             </div>
         </div>
     `;
@@ -527,6 +528,163 @@ function showToast(message) {
 const STORAGE_KEY = 'lingxi_user';
 const adConfig = { duration: 30, enabled: true, memberLevel: '月卡及以上' };
 
+// DeepSeek AI 配置
+const aiConfig = {
+    apiKey: '',
+    endpoint: 'https://api.deepseek.com/v1/chat/completions',
+    model: 'deepseek-chat',
+    enabled: false,
+    prompt: ''
+};
+
+function loadAIConfig() {
+    try {
+        const saved = localStorage.getItem('lingxi_ai_config');
+        if (saved) {
+            const parsed = JSON.parse(saved);
+            Object.assign(aiConfig, parsed);
+        }
+    } catch (e) {}
+}
+
+function saveAISettings() {
+    aiConfig.apiKey = document.getElementById('admin-ai-apikey').value.trim();
+    aiConfig.endpoint = document.getElementById('admin-ai-endpoint').value.trim() || aiConfig.endpoint;
+    aiConfig.model = document.getElementById('admin-ai-model').value;
+    aiConfig.enabled = document.getElementById('admin-ai-enabled').checked;
+    aiConfig.prompt = document.getElementById('admin-ai-prompt').value;
+    localStorage.setItem('lingxi_ai_config', JSON.stringify(aiConfig));
+    showToast('AI 配置已保存 ✅');
+}
+
+function loadAISettingsToUI() {
+    const apikeyEl = document.getElementById('admin-ai-apikey');
+    if (apikeyEl) {
+        apikeyEl.value = aiConfig.apiKey;
+        document.getElementById('admin-ai-endpoint').value = aiConfig.endpoint;
+        document.getElementById('admin-ai-model').value = aiConfig.model;
+        document.getElementById('admin-ai-enabled').checked = aiConfig.enabled;
+        document.getElementById('admin-ai-prompt').value = aiConfig.prompt || document.getElementById('admin-ai-prompt').value;
+    }
+}
+
+async function testAIConnection() {
+    if (!aiConfig.apiKey) {
+        showToast('请先填写 API Key');
+        return;
+    }
+    showToast('正在测试连接...');
+    try {
+        const res = await fetch(aiConfig.endpoint, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + aiConfig.apiKey
+            },
+            body: JSON.stringify({
+                model: aiConfig.model,
+                messages: [{ role: 'user', content: '你好，请用一句话回复。' }],
+                max_tokens: 50
+            })
+        });
+        if (res.ok) {
+            showToast('连接成功！🎉');
+        } else {
+            const err = await res.json().catch(() => ({}));
+            showToast('连接失败：' + (err.error?.message || res.status));
+        }
+    } catch (e) {
+        showToast('连接失败：' + e.message);
+    }
+}
+
+async function askAIAnalysis() {
+    if (!aiConfig.enabled) {
+        showToast('AI 分析未启用，请先在后台开启');
+        return;
+    }
+    if (!aiConfig.apiKey) {
+        showToast('请先在后台管理配置 DeepSeek API Key');
+        return;
+    }
+    if (!currentAssessment) {
+        showToast('请先完成一项测评');
+        return;
+    }
+
+    const template = reportTemplates[currentAssessment];
+    if (!template) {
+        showToast('暂无对应测评数据');
+        return;
+    }
+
+    const user = (() => { try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || 'null'); } catch (e) { return null; } })();
+    const userInfo = user ? `${user.username} (ID: ${user.id || '-'})` : '访客用户';
+
+    let prompt = aiConfig.prompt || `请分析${currentAssessment}结果，分数${template.score}。`;
+    prompt = prompt
+        .replace(/\{type\}/g, currentAssessment)
+        .replace(/\{score\}/g, template.score !== null ? template.score + '分' : '已完成')
+        .replace(/\{shengxiao\}/g, '属蛇')
+        .replace(/\{xingzuo\}/g, '处女座')
+        .replace(/\{personality\}/g, 'IN型')
+        .replace(/\{userInfo\}/g, userInfo);
+
+    showToast('AI 正在分析中...');
+
+    try {
+        const res = await fetch(aiConfig.endpoint, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + aiConfig.apiKey
+            },
+            body: JSON.stringify({
+                model: aiConfig.model,
+                messages: [
+                    { role: 'system', content: '你是一位资深心理咨询师，擅长用温暖、专业的语言解读测评结果。' },
+                    { role: 'user', content: prompt }
+                ],
+                temperature: 0.7,
+                max_tokens: 1000
+            })
+        });
+
+        if (!res.ok) {
+            const err = await res.json().catch(() => ({}));
+            showToast('AI 调用失败：' + (err.error?.message || res.status));
+            return;
+        }
+
+        const data = await res.json();
+        const content = data.choices?.[0]?.message?.content || 'AI 未返回内容';
+        showAIReport(content, data.usage);
+    } catch (e) {
+        showToast('AI 调用失败：' + e.message);
+    }
+}
+
+function showAIReport(content, usage) {
+    document.getElementById('report-detail-title').textContent = '🤖 AI 深度分析报告';
+    const used = usage ? `<div style="font-size:12px;color:var(--gray-500);margin-bottom:8px">本次消耗 Tokens：${usage.total_tokens}（输入 ${usage.prompt_tokens} / 输出 ${usage.completion_tokens}）</div>` : '';
+    const formatted = content
+        .replace(/### (.*?)\n/g, '<h3 style="color:var(--purple-deep);margin:14px 0 8px;font-size:16px">$1</h3>')
+        .replace(/## (.*?)\n/g, '<h2 style="color:var(--purple-deep);margin:16px 0 10px;font-size:18px">$1</h2>')
+        .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+        .replace(/^\d+\.\s+(.*)$/gm, '<div style="margin:4px 0;padding-left:8px">$&</div>')
+        .replace(/\n/g, '<br>');
+
+    document.getElementById('report-detail-body').innerHTML = `
+        ${used}
+        <div style="line-height:1.8;font-size:14px;color:var(--gray-700)">${formatted}</div>
+        <div style="margin-top:16px;display:flex;gap:10px">
+            <button class="pay-btn outline" onclick="closeModal('report-detail')">关闭</button>
+        </div>
+        <div class="payment-member-tip">🧠 内容由 DeepSeek AI 生成，仅供参考</div>
+    `;
+    showModal('report-detail');
+}
+
 function switchAuth(type) {
     document.getElementById('login-form').classList.toggle('active', type === 'login');
     document.getElementById('register-form').classList.toggle('active', type === 'register');
@@ -677,6 +835,7 @@ function switchAdminTab(tab) {
     if (tab === 'membership') renderAdminMember();
     if (tab === 'assessment') renderAdminAssess();
     if (tab === 'ad') loadAdSettings();
+    if (tab === 'ai') loadAISettingsToUI();
 }
 
 function renderAdminUsers() {
@@ -782,6 +941,9 @@ function saveAdSettings() {
 document.addEventListener('DOMContentLoaded', function() {
     // 检查登录态
     checkLoginState();
+
+    // 加载 AI 配置
+    loadAIConfig();
 
     // 打卡按钮脉冲动画
     const checkinBtn = document.getElementById('checkin-btn');

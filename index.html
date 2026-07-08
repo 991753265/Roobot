@@ -961,6 +961,7 @@
                     <div class="admin-tab" data-admin="membership" onclick="switchAdminTab('membership')">👑 会员</div>
                     <div class="admin-tab" data-admin="assessment" onclick="switchAdminTab('assessment')">📝 测评</div>
                     <div class="admin-tab" data-admin="ad" onclick="switchAdminTab('ad')">📺 广告</div>
+                    <div class="admin-tab" data-admin="ai" onclick="switchAdminTab('ai')">🤖 AI分析</div>
                 </div>
 
                 <!-- 概览 -->
@@ -1061,6 +1062,54 @@
                             </select>
                         </div>
                         <button class="auth-submit" onclick="saveAdSettings()">保存设置</button>
+                    </div>
+                </div>
+
+                <!-- AI分析（DeepSeek）设置 -->
+                <div class="admin-panel" id="admin-panel-ai">
+                    <div class="admin-card">
+                        <div class="admin-card-title">🤖 DeepSeek AI 分析配置</div>
+                        <div class="admin-form-group">
+                            <label>API Key</label>
+                            <input type="text" id="admin-ai-apikey" class="form-input" placeholder="sk-xxxxxxxxxxxxxxxxxxxxxxxx">
+                        </div>
+                        <div class="admin-form-group">
+                            <label>API 地址</label>
+                            <input type="text" id="admin-ai-endpoint" class="form-input" value="https://api.deepseek.com/v1/chat/completions">
+                        </div>
+                        <div class="admin-form-group">
+                            <label>模型</label>
+                            <select id="admin-ai-model" class="form-input">
+                                <option value="deepseek-chat">deepseek-chat (V3)</option>
+                                <option value="deepseek-reasoner">deepseek-reasoner (R1)</option>
+                            </select>
+                        </div>
+                        <div class="admin-form-group">
+                            <label>启用 AI 深度分析</label>
+                            <label class="toggle-label">
+                                <span>使用 DeepSeek 生成个性化报告</span>
+                                <input type="checkbox" id="admin-ai-enabled" class="toggle-switch">
+                            </label>
+                        </div>
+                        <div class="admin-form-group">
+                            <label>分析提示词模板</label>
+                            <textarea id="admin-ai-prompt" class="form-input" rows="6">你是一位资深心理咨询师。请根据以下测评结果，给出专业、温暖、个性化的深度分析报告：
+
+测评类型：{type}
+测评分数：{score}
+用户基本信息：属相{shengxiao}、星座{xingzuo}、人格类型{personality}
+
+请从以下维度展开：
+1. 性格特点解读
+2. 优势与潜能
+3. 成长建议
+4. 人际/职业方向建议
+5. 情绪调节小贴士
+
+字数控制在 500 字以内，语言温暖、有洞察力。</textarea>
+                        </div>
+                        <button class="auth-submit" onclick="saveAISettings()">保存配置</button>
+                        <button class="auth-submit" style="background:linear-gradient(135deg,#4a90e2,#357abd);margin-top:10px" onclick="testAIConnection()">🔍 测试连接</button>
                     </div>
                 </div>
             </div>

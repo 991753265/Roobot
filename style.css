@@ -1807,6 +1807,13 @@ html, body {
     border: 1.5px solid var(--teal-deep) !important;
 }
 
+.result-btn-ai {
+    background: linear-gradient(135deg, #4a90e2, #357abd);
+    color: var(--white);
+    border: none;
+    margin-top: 10px;
+}
+
 /* ========== 弹窗 ========== */
 .modal-overlay {
     position: fixed;
