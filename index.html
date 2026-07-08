@@ -1,0 +1,1404 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>灵犀人格舱</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="app">
+        <!-- ========== 登录/注册页 ========== -->
+        <div id="login-page" class="login-page active">
+            <div class="login-bg"></div>
+            <div class="login-box">
+                <div class="login-logo">🧭</div>
+                <h1 class="login-title">灵犀人格舱</h1>
+                <p class="login-slogan">探索自我 · 洞察他人</p>
+
+                <!-- 登录表单 -->
+                <div id="login-form" class="auth-form active">
+                    <div class="form-group">
+                        <label>账号</label>
+                        <input type="text" id="login-account" class="form-input" placeholder="请输入手机号或账号">
+                    </div>
+                    <div class="form-group">
+                        <label>密码</label>
+                        <input type="password" id="login-password" class="form-input" placeholder="请输入密码">
+                    </div>
+                    <button class="auth-submit" onclick="doLogin()">登 录</button>
+                    <div class="auth-switch">还没有账号？<a href="javascript:void(0)" onclick="switchAuth('register')">立即注册</a></div>
+                    <div class="auth-demo-tip">演示账号：admin / 123456</div>
+                </div>
+
+                <!-- 注册表单 -->
+                <div id="register-form" class="auth-form">
+                    <div class="form-group">
+                        <label>账号</label>
+                        <input type="text" id="register-account" class="form-input" placeholder="请输入手机号或账号">
+                    </div>
+                    <div class="form-group">
+                        <label>密码</label>
+                        <input type="password" id="register-password" class="form-input" placeholder="请设置密码（6位以上）">
+                    </div>
+                    <div class="form-group">
+                        <label>确认密码</label>
+                        <input type="password" id="register-confirm" class="form-input" placeholder="请再次输入密码">
+                    </div>
+                    <button class="auth-submit" onclick="doRegister()">注 册</button>
+                    <div class="auth-switch">已有账号？<a href="javascript:void(0)" onclick="switchAuth('login')">去登录</a></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ========== 首页 ========== -->
+        <div id="page-home" class="page">
+            <div class="page-scroll">
+                <!-- 身份卡 -->
+                <div class="identity-card">
+                    <div class="identity-bg"></div>
+                    <div class="identity-content">
+                        <h1 class="app-title">灵犀人格舱</h1>
+                        <p class="identity-info">我是 <span class="highlight">IN型人格</span> · <span class="highlight">处女座</span> · <span class="highlight">属蛇</span></p>
+                    </div>
+                </div>
+
+                <!-- 今日运势 -->
+                <div class="luck-card">
+                    <div class="luck-icon">✨</div>
+                    <div class="luck-content">
+                        <div class="luck-label">今日运势</div>
+                        <div class="luck-text">今天的运势<span class="luck-level">极佳</span>，祝你开业大吉！</div>
+                    </div>
+                </div>
+
+                <!-- 机器人建议 -->
+                <div class="advice-card" onclick="showModal('robot-advice')">
+                    <div class="advice-header">
+                        <span class="advice-icon">🤖</span>
+                        <span class="advice-title">机器人建议</span>
+                        <span class="advice-arrow">›</span>
+                    </div>
+                    <p class="advice-preview">今日适合沟通与合作，建议主动社交...</p>
+                </div>
+
+                <!-- 老师有话说 -->
+                <div class="advice-card teacher-card" onclick="showModal('teacher-words')">
+                    <div class="advice-header">
+                        <span class="advice-icon">👩‍🏫</span>
+                        <span class="advice-title">老师有话说</span>
+                        <span class="advice-arrow">›</span>
+                    </div>
+                    <p class="advice-preview">你的性格类型非常适合团队协作，建议多参与...</p>
+                </div>
+
+                <!-- 娱乐版入口 -->
+                <div class="section-header">
+                    <span class="section-icon">🎮</span>
+                    <span>娱乐版</span>
+                </div>
+                <div class="feature-grid" id="entertainment-grid">
+                    <div class="feature-item" onclick="openSubPage('entertainment')">
+                        <div class="feature-emoji">🐉</div>
+                        <div class="feature-name">属相分析</div>
+                    </div>
+                    <div class="feature-item" onclick="openSubPage('entertainment')">
+                        <div class="feature-emoji">⭐</div>
+                        <div class="feature-name">星座运势</div>
+                    </div>
+                    <div class="feature-item" onclick="openSubPage('entertainment')">
+                        <div class="feature-emoji">🃏</div>
+                        <div class="feature-name">塔罗牌</div>
+                    </div>
+                    <div class="feature-item" onclick="openSubPage('entertainment')">
+                        <div class="feature-emoji">☀️</div>
+                        <div class="feature-name">今日运势</div>
+                    </div>
+                    <div class="feature-item" onclick="openSubPage('entertainment')">
+                        <div class="feature-emoji">🎰</div>
+                        <div class="feature-name">抽签送积分</div>
+                    </div>
+                    <div class="feature-item" onclick="openSubPage('entertainment')">
+                        <div class="feature-emoji">👥</div>
+                        <div class="feature-name">朋友性格</div>
+                    </div>
+                    <div class="feature-item" onclick="openSubPage('entertainment')">
+                        <div class="feature-emoji">🌟</div>
+                        <div class="feature-name">朋友星座</div>
+                    </div>
+                    <div class="feature-item" onclick="openSubPage('entertainment')">
+                        <div class="feature-emoji">🏗️</div>
+                        <div class="feature-name">工商风水</div>
+                    </div>
+                </div>
+
+                <!-- 专业版入口 -->
+                <div class="section-header">
+                    <span class="section-icon">📊</span>
+                    <span>专业版</span>
+                </div>
+                <div class="feature-grid" id="professional-grid">
+                    <div class="feature-item" onclick="startAssessment('性格测试')">
+                        <div class="feature-emoji">🧠</div>
+                        <div class="feature-name">性格测试</div>
+                    </div>
+                    <div class="feature-item" onclick="startAssessment('兴趣分析')">
+                        <div class="feature-emoji">🎯</div>
+                        <div class="feature-name">兴趣分析</div>
+                    </div>
+                    <div class="feature-item" onclick="startAssessment('抗压能力')">
+                        <div class="feature-emoji">💪</div>
+                        <div class="feature-name">抗压能力</div>
+                    </div>
+                    <div class="feature-item" onclick="startAssessment('心理年龄')">
+                        <div class="feature-emoji">🧒</div>
+                        <div class="feature-name">心理年龄</div>
+                    </div>
+                    <div class="feature-item" onclick="startAssessment('创新意识')">
+                        <div class="feature-emoji">💡</div>
+                        <div class="feature-name">创新意识</div>
+                    </div>
+                    <div class="feature-item" onclick="startAssessment('安全意识')">
+                        <div class="feature-emoji">🛡️</div>
+                        <div class="feature-name">安全意识</div>
+                    </div>
+                    <div class="feature-item" onclick="startAssessment('质量意识')">
+                        <div class="feature-emoji">✅</div>
+                        <div class="feature-name">质量意识</div>
+                    </div>
+                    <div class="feature-item" onclick="startAssessment('团队意识')">
+                        <div class="feature-emoji">🤝</div>
+                        <div class="feature-name">团队意识</div>
+                    </div>
+                    <div class="feature-item" onclick="openSubPage('professional')">
+                        <div class="feature-emoji">💼</div>
+                        <div class="feature-name">商务测评</div>
+                    </div>
+                    <div class="feature-item" onclick="startAssessment('职业推荐')">
+                        <div class="feature-emoji">🚀</div>
+                        <div class="feature-name">职业推荐</div>
+                    </div>
+                    <div class="feature-item" onclick="navigateTo('team')">
+                        <div class="feature-emoji">🧩</div>
+                        <div class="feature-name">团队互补</div>
+                    </div>
+                </div>
+
+                <!-- 打卡积分 -->
+                <div class="checkin-card">
+                    <div class="checkin-left">
+                        <div class="checkin-icon">📅</div>
+                        <div>
+                            <div class="checkin-title">坚持打卡送积分</div>
+                            <div class="checkin-sub">已连续打卡 <span id="checkin-days" class="checkin-days-link" onclick="openSubPage('checkin')">3</span> 天</div>
+                        </div>
+                    </div>
+                    <button class="checkin-btn" id="checkin-btn" onclick="doCheckin()">打卡</button>
+                </div>
+
+                <!-- 每日排行 -->
+                <div class="rank-card" onclick="navigateTo('dynamic')">
+                    <div class="rank-header">
+                        <span>🏆 每日排行</span>
+                        <span class="rank-more">查看更多 ›</span>
+                    </div>
+                    <div class="rank-list">
+                        <div class="rank-item"><span class="rank-num rank-1">1</span><span>林同学</span><span class="rank-score">96分</span></div>
+                        <div class="rank-item"><span class="rank-num rank-2">2</span><span>王经理</span><span class="rank-score">94分</span></div>
+                        <div class="rank-item"><span class="rank-num rank-3">3</span><span>你</span><span class="rank-score">98分</span></div>
+                    </div>
+                </div>
+
+                <!-- 上次测评提醒 -->
+                <div class="reminder-card">
+                    <div class="reminder-icon">⏰</div>
+                    <div class="reminder-content">
+                        <div class="reminder-text">距离上一次测评已经过 <span class="highlight">5</span> 天</div>
+                        <div class="reminder-sub">上次情商测试的结果是 <span class="highlight">98 分</span>，在朋友中排第 <span class="highlight">3</span> 名</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ========== 动态页 ========== -->
+        <div id="page-dynamic" class="page">
+            <div class="page-scroll">
+                <div class="page-title">动态</div>
+
+                <!-- 同类性格朋友圈 -->
+                <div class="section-header">
+                    <span class="section-icon">👥</span>
+                    <span>同类性格朋友圈</span>
+                </div>
+                <div class="friend-circle">
+                    <div class="circle-item">
+                        <div class="circle-avatar">🧑‍💻</div>
+                        <div class="circle-name">小张</div>
+                        <div class="circle-tag">IN型</div>
+                    </div>
+                    <div class="circle-item">
+                        <div class="circle-avatar">👩‍🎨</div>
+                        <div class="circle-name">阿美</div>
+                        <div class="circle-tag">IN型</div>
+                    </div>
+                    <div class="circle-item">
+                        <div class="circle-avatar">👨‍🔬</div>
+                        <div class="circle-name">老陈</div>
+                        <div class="circle-tag">IN型</div>
+                    </div>
+                    <div class="circle-item">
+                        <div class="circle-avatar">👩‍💼</div>
+                        <div class="circle-name">王姐</div>
+                        <div class="circle-tag">IN型</div>
+                    </div>
+                </div>
+
+                <!-- 好友测评动态 -->
+                <div class="section-header">
+                    <span class="section-icon">📋</span>
+                    <span>好友测评动态</span>
+                </div>
+                <div class="dynamic-list">
+                    <div class="dynamic-item">
+                        <div class="dynamic-avatar">🧑‍💻</div>
+                        <div class="dynamic-content">
+                            <div class="dynamic-name">小张完成了<strong>性格测试</strong></div>
+                            <div class="dynamic-detail">得分 92 分 · 2小时前</div>
+                        </div>
+                        <button class="dynamic-view-btn" onclick="showPayOrAd('小张的性格结果')">查看</button>
+                    </div>
+                    <div class="dynamic-item">
+                        <div class="dynamic-avatar">👩‍🎨</div>
+                        <div class="dynamic-content">
+                            <div class="dynamic-name">阿美完成了<strong>星座运势</strong></div>
+                            <div class="dynamic-detail">运势极佳 · 5小时前</div>
+                        </div>
+                        <button class="dynamic-view-btn" onclick="showPayOrAd('阿美的星座运势')">查看</button>
+                    </div>
+                    <div class="dynamic-item">
+                        <div class="dynamic-avatar">👨‍🔬</div>
+                        <div class="dynamic-content">
+                            <div class="dynamic-name">老陈完成了<strong>抗压能力</strong>测评</div>
+                            <div class="dynamic-detail">得分 88 分 · 昨天</div>
+                        </div>
+                        <button class="dynamic-view-btn" onclick="showPayOrAd('老陈的抗压结果')">查看</button>
+                    </div>
+                </div>
+
+                <!-- 邀请朋友 -->
+                <div class="invite-card">
+                    <div class="invite-icon">📨</div>
+                    <div class="invite-content">
+                        <div class="invite-title">邀请朋友参与测评</div>
+                        <div class="invite-sub">了解朋友的性格，发现更多可能</div>
+                    </div>
+                    <button class="invite-btn" onclick="showInviteToast()">邀请</button>
+                </div>
+
+                <!-- 朋友匹配度 -->
+                <div class="section-header">
+                    <span class="section-icon">💕</span>
+                    <span>朋友匹配度</span>
+                </div>
+                <div class="match-list">
+                    <div class="match-item">
+                        <div class="match-avatar">🧑‍💻</div>
+                        <div class="match-info">
+                            <div class="match-name">小张</div>
+                            <div class="match-type">IN型 · 处女座</div>
+                        </div>
+                        <div class="match-score">92%</div>
+                    </div>
+                    <div class="match-item">
+                        <div class="match-avatar">👩‍🎨</div>
+                        <div class="match-info">
+                            <div class="match-name">阿美</div>
+                            <div class="match-type">ES型 · 双鱼座</div>
+                        </div>
+                        <div class="match-score">78%</div>
+                    </div>
+                    <div class="match-item">
+                        <div class="match-avatar">👨‍🔬</div>
+                        <div class="match-info">
+                            <div class="match-name">老陈</div>
+                            <div class="match-type">IN型 · 摩羯座</div>
+                        </div>
+                        <div class="match-score">95%</div>
+                    </div>
+                </div>
+
+                <!-- 每日排行 -->
+                <div class="section-header">
+                    <span class="section-icon">🏆</span>
+                    <span>每日排行</span>
+                </div>
+                <div class="daily-rank">
+                    <div class="rank-item-full">
+                        <span class="rank-medal">🥇</span>
+                        <span class="rank-name">你</span>
+                        <span class="rank-bar" style="width: 98%"></span>
+                        <span class="rank-val">98分</span>
+                    </div>
+                    <div class="rank-item-full">
+                        <span class="rank-medal">🥈</span>
+                        <span class="rank-name">林同学</span>
+                        <span class="rank-bar" style="width: 96%"></span>
+                        <span class="rank-val">96分</span>
+                    </div>
+                    <div class="rank-item-full">
+                        <span class="rank-medal">🥉</span>
+                        <span class="rank-name">王经理</span>
+                        <span class="rank-bar" style="width: 94%"></span>
+                        <span class="rank-val">94分</span>
+                    </div>
+                    <div class="rank-item-full">
+                        <span class="rank-medal">4</span>
+                        <span class="rank-name">小张</span>
+                        <span class="rank-bar" style="width: 92%"></span>
+                        <span class="rank-val">92分</span>
+                    </div>
+                    <div class="rank-item-full">
+                        <span class="rank-medal">5</span>
+                        <span class="rank-name">阿美</span>
+                        <span class="rank-bar" style="width: 88%"></span>
+                        <span class="rank-val">88分</span>
+                    </div>
+                </div>
+
+                <!-- 霸榜提示 -->
+                <div class="champion-tip">
+                    <span>🔥</span> 连续霸榜3天将触发附加题，挑战更高排名！
+                </div>
+            </div>
+        </div>
+
+        <!-- ========== 团队页 ========== -->
+        <div id="page-team" class="page">
+            <div class="page-scroll">
+                <div class="page-title">团队</div>
+
+                <!-- 人才岗位发布 -->
+                <div class="job-card">
+                    <div class="job-header">
+                        <span>📢 人才岗位发布</span>
+                        <button class="job-publish-btn" onclick="showPublishJob()">发布</button>
+                    </div>
+                    <div class="job-list">
+                        <div class="job-item">
+                            <div class="job-title">高级工程师</div>
+                            <div class="job-tags"><span class="job-tag">5年+</span><span class="job-tag">安全管理</span></div>
+                        </div>
+                        <div class="job-item">
+                            <div class="job-title">商务经理</div>
+                            <div class="job-tags"><span class="job-tag">3年+</span><span class="job-tag">资源整合</span></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 技能矩阵 -->
+                <div class="section-header">
+                    <span class="section-icon">🎯</span>
+                    <span>技能矩阵</span>
+                </div>
+                <div class="skill-matrix">
+                    <div class="skill-item">
+                        <div class="skill-name">安全管理</div>
+                        <div class="skill-bar-bg"><div class="skill-bar" style="width:90%"></div></div>
+                        <div class="skill-val">90%</div>
+                    </div>
+                    <div class="skill-item">
+                        <div class="skill-name">质量检测</div>
+                        <div class="skill-bar-bg"><div class="skill-bar" style="width:85%"></div></div>
+                        <div class="skill-val">85%</div>
+                    </div>
+                    <div class="skill-item">
+                        <div class="skill-name">商务谈判</div>
+                        <div class="skill-bar-bg"><div class="skill-bar" style="width:78%"></div></div>
+                        <div class="skill-val">78%</div>
+                    </div>
+                    <div class="skill-item">
+                        <div class="skill-name">编程开发</div>
+                        <div class="skill-bar-bg"><div class="skill-bar" style="width:82%"></div></div>
+                        <div class="skill-val">82%</div>
+                    </div>
+                </div>
+
+                <!-- 匹配筛选 -->
+                <div class="section-header">
+                    <span class="section-icon">🔍</span>
+                    <span>团队匹配筛选</span>
+                </div>
+                <div class="filter-panel">
+                    <div class="filter-group">
+                        <label>性格类型</label>
+                        <div class="filter-tags">
+                            <span class="filter-tag active">IN型</span>
+                            <span class="filter-tag">ES型</span>
+                            <span class="filter-tag">EN型</span>
+                            <span class="filter-tag">IS型</span>
+                        </div>
+                    </div>
+                    <div class="filter-group">
+                        <label>年龄范围</label>
+                        <div class="filter-tags">
+                            <span class="filter-tag">20-25</span>
+                            <span class="filter-tag active">25-35</span>
+                            <span class="filter-tag">35-45</span>
+                            <span class="filter-tag">45+</span>
+                        </div>
+                    </div>
+                    <div class="filter-group">
+                        <label>专业领域</label>
+                        <div class="filter-tags">
+                            <span class="filter-tag active">工程技术</span>
+                            <span class="filter-tag">商务管理</span>
+                            <span class="filter-tag">数据分析</span>
+                        </div>
+                    </div>
+                    <div class="filter-group">
+                        <label>兴趣爱好</label>
+                        <div class="filter-tags">
+                            <span class="filter-tag">阅读</span>
+                            <span class="filter-tag active">编程</span>
+                            <span class="filter-tag">运动</span>
+                            <span class="filter-tag">旅行</span>
+                        </div>
+                    </div>
+                    <button class="filter-btn" onclick="generateTeamRecommend()">生成团队推荐</button>
+                </div>
+
+                <!-- 团队推荐 -->
+                <div class="section-header">
+                    <span class="section-icon">🧩</span>
+                    <span>团队互补推荐</span>
+                </div>
+                <div class="team-recommend" id="team-recommend">
+                    <div class="team-member">
+                        <div class="member-avatar">👷</div>
+                        <div class="member-info">
+                            <div class="member-name">张工</div>
+                            <div class="member-type">安全质量型工程师</div>
+                            <div class="member-skills"><span class="skill-tag">安全管理</span><span class="skill-tag">质量检测</span></div>
+                        </div>
+                        <div class="member-match">95%</div>
+                    </div>
+                    <div class="team-member">
+                        <div class="member-avatar">🤵</div>
+                        <div class="member-info">
+                            <div class="member-name">李总</div>
+                            <div class="member-type">商务资源型伙伴</div>
+                            <div class="member-skills"><span class="skill-tag">商务谈判</span><span class="skill-tag">资源整合</span></div>
+                        </div>
+                        <div class="member-match">88%</div>
+                    </div>
+                    <div class="team-member">
+                        <div class="member-avatar">🎓</div>
+                        <div class="member-info">
+                            <div class="member-name">小陈</div>
+                            <div class="member-type">学生潜力型实习生</div>
+                            <div class="member-skills"><span class="skill-tag">编程</span><span class="skill-tag">数据分析</span></div>
+                        </div>
+                        <div class="member-match">82%</div>
+                    </div>
+                </div>
+
+                <!-- 推荐方向 -->
+                <div class="direction-cards">
+                    <div class="direction-card">
+                        <div class="direction-icon">💰</div>
+                        <div class="direction-title">高收入职业方向</div>
+                        <div class="direction-desc">AI产品经理 · 工程项目经理</div>
+                    </div>
+                    <div class="direction-card">
+                        <div class="direction-icon">🌱</div>
+                        <div class="direction-title">新兴职业方向</div>
+                        <div class="direction-desc">组织发展顾问 · 用户体验设计师</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ========== 报告页 ========== -->
+        <div id="page-report" class="page">
+            <div class="page-scroll">
+                <div class="page-title">报告</div>
+
+                <!-- 情商测试结果 -->
+                <div class="report-highlight">
+                    <div class="report-score-circle">
+                        <div class="score-number">98</div>
+                        <div class="score-label">情商测试</div>
+                    </div>
+                    <div class="report-meta">
+                        <div>在朋友中排名：<strong>第 3 名</strong></div>
+                        <div>距上次测评：<strong>5 天</strong></div>
+                        <div>推荐职业：AI产品经理、工程项目经理、组织发展顾问</div>
+                    </div>
+                    <div class="report-today-tip">今日建议：适合沟通、开业、合作、复盘</div>
+                </div>
+
+                <!-- 报告列表 -->
+                <div class="section-header">
+                    <span class="section-icon">📑</span>
+                    <span>我的报告</span>
+                </div>
+                <div class="report-list">
+                    <div class="report-item" onclick="openReport('性格测试', 92)">
+                        <div class="report-icon">🧠</div>
+                        <div class="report-info">
+                            <div class="report-name">性格测试报告</div>
+                            <div class="report-date">2026-07-03</div>
+                        </div>
+                        <div class="report-score-badge">92分</div>
+                    </div>
+                    <div class="report-item" onclick="openReport('兴趣分析', 88)">
+                        <div class="report-icon">🎯</div>
+                        <div class="report-info">
+                            <div class="report-name">兴趣分析报告</div>
+                            <div class="report-date">2026-07-01</div>
+                        </div>
+                        <div class="report-score-badge">88分</div>
+                    </div>
+                    <div class="report-item" onclick="openReport('抗压能力', 85)">
+                        <div class="report-icon">💪</div>
+                        <div class="report-info">
+                            <div class="report-name">抗压能力报告</div>
+                            <div class="report-date">2026-06-28</div>
+                        </div>
+                        <div class="report-score-badge">85分</div>
+                    </div>
+                    <div class="report-item" onclick="openReport('星座运势', null)">
+                        <div class="report-icon">⭐</div>
+                        <div class="report-info">
+                            <div class="report-name">星座运势报告</div>
+                            <div class="report-date">2026-07-08</div>
+                        </div>
+                        <div class="report-score-badge text">极佳</div>
+                    </div>
+                    <div class="report-item" onclick="openReport('职业推荐', null)">
+                        <div class="report-icon">🚀</div>
+                        <div class="report-info">
+                            <div class="report-name">职业推荐报告</div>
+                            <div class="report-date">2026-07-05</div>
+                        </div>
+                        <div class="report-score-badge text">已生成</div>
+                    </div>
+                    <div class="report-item" onclick="openReport('团队互补', null)">
+                        <div class="report-icon">🧩</div>
+                        <div class="report-info">
+                            <div class="report-name">团队互补报告</div>
+                            <div class="report-date">2026-07-02</div>
+                        </div>
+                        <div class="report-score-badge text">已生成</div>
+                    </div>
+                    <div class="report-item" onclick="openReport('商务测评', 90)">
+                        <div class="report-icon">💼</div>
+                        <div class="report-info">
+                            <div class="report-name">商务测评报告</div>
+                            <div class="report-date">2026-06-25</div>
+                        </div>
+                        <div class="report-score-badge">90分</div>
+                    </div>
+                    <div class="report-item" onclick="openReport('情商测试', 98)">
+                        <div class="report-icon">💖</div>
+                        <div class="report-info">
+                            <div class="report-name">情商测试结果</div>
+                            <div class="report-date">2026-07-03</div>
+                        </div>
+                        <div class="report-score-badge">98分</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ========== 我的页 ========== -->
+        <div id="page-mine" class="page">
+            <div class="page-scroll">
+                <!-- 用户卡 -->
+                <div class="mine-header">
+                    <div class="mine-avatar">😊</div>
+                    <div class="mine-info">
+                        <div class="mine-name">用户</div>
+                        <div class="mine-tags">
+                            <span class="mine-tag">IN型人格</span>
+                            <span class="mine-tag">处女座</span>
+                            <span class="mine-tag">属蛇</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 积分和会员 -->
+                <div class="mine-stats">
+                    <div class="stat-item">
+                        <div class="stat-value" id="mine-points">1288</div>
+                        <div class="stat-label">我的积分</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value">3</div>
+                        <div class="stat-label">连续打卡</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value">月卡</div>
+                        <div class="stat-label">会员状态</div>
+                    </div>
+                </div>
+
+                <!-- 功能列表 -->
+                <div class="mine-list">
+                    <div class="mine-item" onclick="openSubPage('membership')">
+                        <span class="mine-icon">👑</span>
+                        <span class="mine-label">会员购买</span>
+                        <span class="mine-arrow">›</span>
+                    </div>
+                    <div class="mine-item" onclick="openSubPage('shop')">
+                        <span class="mine-icon">🛒</span>
+                        <span class="mine-label">商城</span>
+                        <span class="mine-arrow">›</span>
+                    </div>
+                    <div class="mine-item" onclick="showModal('my-orders')">
+                        <span class="mine-icon">📦</span>
+                        <span class="mine-label">我的订单</span>
+                        <span class="mine-arrow">›</span>
+                    </div>
+                    <div class="mine-item" onclick="showModal('my-assessments')">
+                        <span class="mine-icon">📝</span>
+                        <span class="mine-label">我的测评记录</span>
+                        <span class="mine-arrow">›</span>
+                    </div>
+                    <div class="mine-item" onclick="openSubPage('questionnaire')">
+                        <span class="mine-icon">📋</span>
+                        <span class="mine-label">我的问卷</span>
+                        <span class="mine-arrow">›</span>
+                    </div>
+                    <div class="mine-item" onclick="showModal('privacy')">
+                        <span class="mine-icon">🔒</span>
+                        <span class="mine-label">隐私设置</span>
+                        <span class="mine-arrow">›</span>
+                    </div>
+                    <div class="mine-item" onclick="showModal('disclaimer')">
+                        <span class="mine-icon">📄</span>
+                        <span class="mine-label">免责说明</span>
+                        <span class="mine-arrow">›</span>
+                    </div>
+                    <div class="mine-item" onclick="showModal('privacy-notice')">
+                        <span class="mine-icon">🛡️</span>
+                        <span class="mine-label">隐私说明</span>
+                        <span class="mine-arrow">›</span>
+                    </div>
+                    <div class="mine-item" onclick="showModal('authorization')">
+                        <span class="mine-icon">📜</span>
+                        <span class="mine-label">授权书</span>
+                        <span class="mine-arrow">›</span>
+                    </div>
+                    <div class="mine-item" onclick="openSubPage('admin')">
+                        <span class="mine-icon">⚙️</span>
+                        <span class="mine-label">后台管理</span>
+                        <span class="mine-arrow">›</span>
+                    </div>
+                    <div class="mine-item" onclick="doLogout()">
+                        <span class="mine-icon">🚪</span>
+                        <span class="mine-label">退出登录</span>
+                        <span class="mine-arrow">›</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ========== 娱乐版子页面 ========== -->
+        <div id="subpage-entertainment" class="subpage">
+            <div class="page-scroll">
+                <div class="subpage-header">
+                    <button class="back-btn" onclick="closeSubPage()">‹ 返回</button>
+                    <span class="subpage-title">娱乐版</span>
+                </div>
+                <div class="feature-grid">
+                    <div class="feature-item large" onclick="startAssessment('属相分析')">
+                        <div class="feature-emoji">🐉</div>
+                        <div class="feature-name">属相分析</div>
+                        <div class="feature-desc">了解属蛇人的性格与运势</div>
+                    </div>
+                    <div class="feature-item large" onclick="startAssessment('星座运势')">
+                        <div class="feature-emoji">⭐</div>
+                        <div class="feature-name">星座运势</div>
+                        <div class="feature-desc">处女座今日运势详解</div>
+                    </div>
+                    <div class="feature-item large" onclick="startAssessment('塔罗牌')">
+                        <div class="feature-emoji">🃏</div>
+                        <div class="feature-name">塔罗牌</div>
+                        <div class="feature-desc">抽取一张塔罗牌获取指引</div>
+                    </div>
+                    <div class="feature-item large" onclick="startAssessment('今日运势')">
+                        <div class="feature-emoji">☀️</div>
+                        <div class="feature-name">今日运势</div>
+                        <div class="feature-desc">综合运势、爱情、事业、财运</div>
+                    </div>
+                    <div class="feature-item large" onclick="doLottery()">
+                        <div class="feature-emoji">🎰</div>
+                        <div class="feature-name">抽签送积分</div>
+                        <div class="feature-desc">每日抽签赢取积分奖励</div>
+                    </div>
+                    <div class="feature-item large" onclick="showPayOrAd('朋友的性格类型')">
+                        <div class="feature-emoji">👥</div>
+                        <div class="feature-name">朋友性格查看</div>
+                        <div class="feature-desc">付费或看广告查看朋友性格</div>
+                    </div>
+                    <div class="feature-item large" onclick="showPayOrAd('朋友的星座运势')">
+                        <div class="feature-emoji">🌟</div>
+                        <div class="feature-name">朋友星座查看</div>
+                        <div class="feature-desc">付费或看广告查看朋友星座</div>
+                    </div>
+                    <div class="feature-item large" onclick="showFengshui()">
+                        <div class="feature-emoji">🏗️</div>
+                        <div class="feature-name">工商风水</div>
+                        <div class="feature-desc">工程装修/短剧影视/商铺超市</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ========== 专业版子页面 ========== -->
+        <div id="subpage-professional" class="subpage">
+            <div class="page-scroll">
+                <div class="subpage-header">
+                    <button class="back-btn" onclick="closeSubPage()">‹ 返回</button>
+                    <span class="subpage-title">专业版 - 商务测评</span>
+                </div>
+                <div class="feature-grid">
+                    <div class="feature-item large" onclick="startAssessment('形象测评')">
+                        <div class="feature-emoji">👔</div>
+                        <div class="feature-name">形象测评</div>
+                        <div class="feature-desc">商务形象综合评估</div>
+                    </div>
+                    <div class="feature-item large" onclick="startAssessment('谈吐测评')">
+                        <div class="feature-emoji">🗣️</div>
+                        <div class="feature-name">谈吐测评</div>
+                        <div class="feature-desc">语言表达与沟通能力评估</div>
+                    </div>
+                    <div class="feature-item large" onclick="startAssessment('礼仪测评')">
+                        <div class="feature-emoji">🙇</div>
+                        <div class="feature-name">礼仪测评</div>
+                        <div class="feature-desc">商务礼仪素养综合评估</div>
+                    </div>
+                    <div class="feature-item large" onclick="showWineAssessment()">
+                        <div class="feature-emoji">🍷</div>
+                        <div class="feature-name">酒品测评</div>
+                        <div class="feature-desc">红酒/白酒/气泡酒/黄酒/啤酒</div>
+                    </div>
+                    <div class="feature-item large" onclick="startAssessment('人品测评')">
+                        <div class="feature-emoji">🙏</div>
+                        <div class="feature-name">人品测评</div>
+                        <div class="feature-desc">个人品格与信用评估</div>
+                    </div>
+                    <div class="feature-item large" onclick="startAssessment('心理年龄')">
+                        <div class="feature-emoji">🧒</div>
+                        <div class="feature-name">心理年龄</div>
+                        <div class="feature-desc">心理成熟度综合评估</div>
+                    </div>
+                    <div class="feature-item large" onclick="startAssessment('创新意识')">
+                        <div class="feature-emoji">💡</div>
+                        <div class="feature-name">创新意识</div>
+                        <div class="feature-desc">创新思维与意识评估</div>
+                    </div>
+                    <div class="feature-item large" onclick="startAssessment('团队意识')">
+                        <div class="feature-emoji">🤝</div>
+                        <div class="feature-name">团队意识</div>
+                        <div class="feature-desc">个人主义vs集体主义倾向</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ========== 测评子页面 ========== -->
+        <div id="subpage-assessment" class="subpage">
+            <div class="page-scroll">
+                <div class="subpage-header">
+                    <button class="back-btn" onclick="closeSubPage()">‹ 返回</button>
+                    <span class="subpage-title" id="assessment-title">测评</span>
+                </div>
+                <div class="assessment-container" id="assessment-container">
+                    <!-- 动态填充测评内容 -->
+                </div>
+            </div>
+        </div>
+
+        <!-- ========== 商城子页面 ========== -->
+        <div id="subpage-shop" class="subpage">
+            <div class="page-scroll">
+                <div class="subpage-header">
+                    <button class="back-btn" onclick="closeSubPage()">‹ 返回</button>
+                    <span class="subpage-title">商城</span>
+                </div>
+                <div class="shop-grid" id="shop-grid"></div>
+            </div>
+        </div>
+
+        <!-- ========== 会员子页面 ========== -->
+        <div id="subpage-membership" class="subpage">
+            <div class="page-scroll">
+                <div class="subpage-header">
+                    <button class="back-btn" onclick="closeSubPage()">‹ 返回</button>
+                    <span class="subpage-title">会员中心</span>
+                </div>
+                <div class="membership-current">
+                    <div class="membership-badge">👑 月卡会员</div>
+                    <div class="membership-expire">有效期至 2026-08-08</div>
+                </div>
+                <div class="membership-benefits">
+                    <div class="benefit-title">会员权益</div>
+                    <div class="benefit-list">
+                        <div class="benefit-item">✅ 查看深度报告</div>
+                        <div class="benefit-item">✅ 查看朋友性格或星座</div>
+                        <div class="benefit-item">✅ 免广告解锁</div>
+                        <div class="benefit-item">✅ 更多 AI 分析次数</div>
+                        <div class="benefit-item">✅ 真人老师分析折扣</div>
+                        <div class="benefit-item">✅ 商城优惠</div>
+                        <div class="benefit-item">✅ 团队推荐高级筛选</div>
+                    </div>
+                </div>
+                <div class="membership-plans">
+                    <div class="plan-item" onclick="buyMembership('单次付费', 9.9)">
+                        <div class="plan-name">单次付费</div>
+                        <div class="plan-price">¥9.9</div>
+                    </div>
+                    <div class="plan-item" onclick="buyMembership('日卡', 1.9)">
+                        <div class="plan-name">日卡</div>
+                        <div class="plan-price">¥1.9</div>
+                    </div>
+                    <div class="plan-item" onclick="buyMembership('周卡', 9.9)">
+                        <div class="plan-name">周卡</div>
+                        <div class="plan-price">¥9.9</div>
+                    </div>
+                    <div class="plan-item active" onclick="buyMembership('月卡', 29.9)">
+                        <div class="plan-name">月卡</div>
+                        <div class="plan-price">¥29.9</div>
+                        <div class="plan-current">当前</div>
+                    </div>
+                    <div class="plan-item" onclick="buyMembership('季卡', 69.9)">
+                        <div class="plan-name">季卡</div>
+                        <div class="plan-price">¥69.9</div>
+                    </div>
+                    <div class="plan-item" onclick="buyMembership('半年卡', 128)">
+                        <div class="plan-name">半年卡</div>
+                        <div class="plan-price">¥128</div>
+                    </div>
+                    <div class="plan-item" onclick="buyMembership('年卡', 228)">
+                        <div class="plan-name">年卡</div>
+                        <div class="plan-price">¥228</div>
+                    </div>
+                    <div class="plan-item" onclick="buyMembership('终身会员', 599)">
+                        <div class="plan-name">终身会员</div>
+                        <div class="plan-price">¥599</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ========== 问卷子页面 ========== -->
+        <div id="subpage-questionnaire" class="subpage">
+            <div class="page-scroll">
+                <div class="subpage-header">
+                    <button class="back-btn" onclick="closeSubPage()">‹ 返回</button>
+                    <span class="subpage-title">创建问卷</span>
+                </div>
+                <div class="questionnaire-form">
+                    <div class="form-group">
+                        <label>问卷标题</label>
+                        <input type="text" id="q-title" placeholder="请输入问卷标题" class="form-input">
+                    </div>
+                    <div class="form-group">
+                        <label>题目1</label>
+                        <input type="text" id="q-q1" placeholder="请输入题目内容" class="form-input">
+                    </div>
+                    <div class="form-group">
+                        <label>题目2</label>
+                        <input type="text" id="q-q2" placeholder="请输入题目内容" class="form-input">
+                    </div>
+                    <div class="form-group">
+                        <label>题目3</label>
+                        <input type="text" id="q-q3" placeholder="请输入题目内容" class="form-input">
+                    </div>
+                    <div class="form-group">
+                        <label>结果分析方式</label>
+                        <div class="analysis-options">
+                            <label class="radio-label"><input type="radio" name="analysis" value="ai" checked> AI 自动分析</label>
+                            <label class="radio-label"><input type="radio" name="analysis" value="teacher"> 真人老师分析</label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>邀请朋友参与测评</label>
+                        <button class="form-btn" onclick="showInviteToast()">邀请朋友</button>
+                    </div>
+                    <div class="form-group">
+                        <label class="toggle-label">
+                            <span>允许朋友的朋友转发</span>
+                            <input type="checkbox" id="q-forward" class="toggle-switch">
+                        </label>
+                    </div>
+                    <div class="form-actions">
+                        <button class="form-btn outline" onclick="downloadTemplate()">下载模板</button>
+                        <button class="form-btn" onclick="createQuestionnaire()">创建问卷</button>
+                    </div>
+                    <div class="form-actions">
+                        <button class="form-btn outline" onclick="importTemplate()">导入模板</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ========== 后台管理子页面 ========== -->
+        <div id="subpage-admin" class="subpage">
+            <div class="page-scroll">
+                <div class="subpage-header">
+                    <button class="back-btn" onclick="closeSubPage()">‹ 返回</button>
+                    <span class="subpage-title">后台管理</span>
+                </div>
+
+                <!-- 后台 Tab 导航 -->
+                <div class="admin-tabs">
+                    <div class="admin-tab active" data-admin="overview" onclick="switchAdminTab('overview')">📊 概览</div>
+                    <div class="admin-tab" data-admin="users" onclick="switchAdminTab('users')">👥 用户</div>
+                    <div class="admin-tab" data-admin="shop" onclick="switchAdminTab('shop')">🛒 商品</div>
+                    <div class="admin-tab" data-admin="membership" onclick="switchAdminTab('membership')">👑 会员</div>
+                    <div class="admin-tab" data-admin="assessment" onclick="switchAdminTab('assessment')">📝 测评</div>
+                    <div class="admin-tab" data-admin="ad" onclick="switchAdminTab('ad')">📺 广告</div>
+                </div>
+
+                <!-- 概览 -->
+                <div class="admin-panel active" id="admin-panel-overview">
+                    <div class="admin-stat-grid">
+                        <div class="admin-stat-card">
+                            <div class="admin-stat-icon">👥</div>
+                            <div class="admin-stat-val" id="admin-stat-users">1,288</div>
+                            <div class="admin-stat-label">注册用户</div>
+                        </div>
+                        <div class="admin-stat-card">
+                            <div class="admin-stat-icon">📝</div>
+                            <div class="admin-stat-val">3,562</div>
+                            <div class="admin-stat-label">测评次数</div>
+                        </div>
+                        <div class="admin-stat-card">
+                            <div class="admin-stat-icon">💰</div>
+                            <div class="admin-stat-val">¥18,920</div>
+                            <div class="admin-stat-label">本月营收</div>
+                        </div>
+                        <div class="admin-stat-card">
+                            <div class="admin-stat-icon">👑</div>
+                            <div class="admin-stat-val">426</div>
+                            <div class="admin-stat-label">付费会员</div>
+                        </div>
+                    </div>
+                    <div class="admin-card">
+                        <div class="admin-card-title">📈 近7日活跃趋势</div>
+                        <div class="admin-chart">
+                            <div class="chart-bar" style="height:40%"><span>周一</span></div>
+                            <div class="chart-bar" style="height:65%"><span>周二</span></div>
+                            <div class="chart-bar" style="height:55%"><span>周三</span></div>
+                            <div class="chart-bar" style="height:80%"><span>周四</span></div>
+                            <div class="chart-bar" style="height:95%"><span>周五</span></div>
+                            <div class="chart-bar" style="height:70%"><span>周六</span></div>
+                            <div class="chart-bar" style="height:50%"><span>周日</span></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 用户管理 -->
+                <div class="admin-panel" id="admin-panel-users">
+                    <div class="admin-card">
+                        <div class="admin-card-title">用户列表</div>
+                        <div class="admin-user-list" id="admin-user-list"></div>
+                    </div>
+                </div>
+
+                <!-- 商品管理 -->
+                <div class="admin-panel" id="admin-panel-shop">
+                    <div class="admin-card">
+                        <div class="admin-card-header">
+                            <div class="admin-card-title">商品管理</div>
+                            <button class="admin-add-btn" onclick="adminAddItem()">+ 新增</button>
+                        </div>
+                        <div class="admin-shop-list" id="admin-shop-list"></div>
+                    </div>
+                </div>
+
+                <!-- 会员管理 -->
+                <div class="admin-panel" id="admin-panel-membership">
+                    <div class="admin-card">
+                        <div class="admin-card-title">会员套餐管理</div>
+                        <div class="admin-member-list" id="admin-member-list"></div>
+                    </div>
+                </div>
+
+                <!-- 测评管理 -->
+                <div class="admin-panel" id="admin-panel-assessment">
+                    <div class="admin-card">
+                        <div class="admin-card-title">测评项目管理</div>
+                        <div class="admin-assess-list" id="admin-assess-list"></div>
+                    </div>
+                </div>
+
+                <!-- 广告设置 -->
+                <div class="admin-panel" id="admin-panel-ad">
+                    <div class="admin-card">
+                        <div class="admin-card-title">广告设置</div>
+                        <div class="admin-form-group">
+                            <label>广告时长（秒）</label>
+                            <input type="number" id="admin-ad-duration" class="form-input" min="5" max="120" value="30">
+                        </div>
+                        <div class="admin-form-group">
+                            <label>广告开关</label>
+                            <label class="toggle-label">
+                                <span>启用广告解锁功能</span>
+                                <input type="checkbox" id="admin-ad-enabled" class="toggle-switch" checked>
+                            </label>
+                        </div>
+                        <div class="admin-form-group">
+                            <label>免广告会员等级</label>
+                            <select id="admin-ad-member-level" class="form-input">
+                                <option>月卡及以上</option>
+                                <option>季卡及以上</option>
+                                <option>年卡及以上</option>
+                                <option>所有会员</option>
+                            </select>
+                        </div>
+                        <button class="auth-submit" onclick="saveAdSettings()">保存设置</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ========== 打卡子页面 ========== -->
+        <div id="subpage-checkin" class="subpage">
+            <div class="page-scroll">
+                <div class="subpage-header">
+                    <button class="back-btn" onclick="closeSubPage()">‹ 返回</button>
+                    <span class="subpage-title">打卡记录</span>
+                </div>
+                <div class="checkin-detail-card">
+                    <div class="checkin-detail-header">
+                        <div class="checkin-detail-icon">📅</div>
+                        <div class="checkin-detail-info">
+                            <div class="checkin-detail-title">连续打卡 <span id="checkin-detail-days">3</span> 天</div>
+                            <div class="checkin-detail-sub">累计获得 <span id="checkin-detail-points">30</span> 积分</div>
+                        </div>
+                    </div>
+                    <div class="checkin-calendar">
+                        <div class="calendar-row">
+                            <div class="calendar-day checked">周一</div>
+                            <div class="calendar-day checked">周二</div>
+                            <div class="calendar-day checked">周三</div>
+                            <div class="calendar-day">周四</div>
+                            <div class="calendar-day">周五</div>
+                            <div class="calendar-day">周六</div>
+                            <div class="calendar-day">周日</div>
+                        </div>
+                        <div class="calendar-row calendar-dates">
+                            <div class="calendar-date checked">7</div>
+                            <div class="calendar-date checked">8</div>
+                            <div class="calendar-date checked">9</div>
+                            <div class="calendar-date">10</div>
+                            <div class="calendar-date">11</div>
+                            <div class="calendar-date">12</div>
+                            <div class="calendar-date">13</div>
+                        </div>
+                    </div>
+                    <div class="checkin-stats">
+                        <div class="stat-item">
+                            <div class="stat-icon">🔥</div>
+                            <div class="stat-value">3</div>
+                            <div class="stat-label">连续天数</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-icon">🏆</div>
+                            <div class="stat-value">15</div>
+                            <div class="stat-label">最长连续</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-icon">📊</div>
+                            <div class="stat-value">42</div>
+                            <div class="stat-label">累计打卡</div>
+                        </div>
+                    </div>
+                    <div class="checkin-rules">
+                        <div class="rules-title">打卡奖励规则</div>
+                        <div class="rule-item">连续打卡 7 天：额外奖励 20 积分</div>
+                        <div class="rule-item">连续打卡 30 天：额外奖励 100 积分</div>
+                        <div class="rule-item">每月全勤打卡：额外奖励 50 积分</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ========== 底部导航 ========== -->
+        <nav class="bottom-nav">
+            <div class="nav-item active" data-page="home" onclick="navigateTo('home')">
+                <div class="nav-icon">🏠</div>
+                <div class="nav-label">首页</div>
+            </div>
+            <div class="nav-item" data-page="dynamic" onclick="navigateTo('dynamic')">
+                <div class="nav-icon">📱</div>
+                <div class="nav-label">动态</div>
+            </div>
+            <div class="nav-item" data-page="team" onclick="navigateTo('team')">
+                <div class="nav-icon">👥</div>
+                <div class="nav-label">团队</div>
+            </div>
+            <div class="nav-item" data-page="report" onclick="navigateTo('report')">
+                <div class="nav-icon">📑</div>
+                <div class="nav-label">报告</div>
+            </div>
+            <div class="nav-item" data-page="mine" onclick="navigateTo('mine')">
+                <div class="nav-icon">👤</div>
+                <div class="nav-label">我的</div>
+            </div>
+        </nav>
+    </div>
+
+    <!-- ========== 弹窗们 ========== -->
+
+    <!-- 机器人建议 -->
+    <div class="modal-overlay" id="modal-robot-advice" onclick="closeModalOnOverlay(event)">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span>🤖 机器人建议</span>
+                <button class="modal-close" onclick="closeModal('robot-advice')">✕</button>
+            </div>
+            <div class="modal-body">
+                <p>根据你的 IN 型人格和今日运势分析：</p>
+                <ul class="advice-list">
+                    <li>今日适合沟通与合作，建议主动社交</li>
+                    <li>处女座今日事业运势上升，把握机会</li>
+                    <li>属蛇人本月贵人运旺盛，注意人际维护</li>
+                    <li>建议进行一次抗压能力测评，了解自身状态</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- 老师有话说 -->
+    <div class="modal-overlay" id="modal-teacher-words" onclick="closeModalOnOverlay(event)">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span>👩‍🏫 老师有话说</span>
+                <button class="modal-close" onclick="closeModal('teacher-words')">✕</button>
+            </div>
+            <div class="modal-body">
+                <p>亲爱的用户：</p>
+                <p>你的性格类型非常适合团队协作，建议多参与集体活动，发挥你的分析能力和细致入微的特质。</p>
+                <p>作为 IN 型人格，你在独处时能深度思考，但也不要忽视与他人的交流。处女座的你追求完美，记得给自己一些宽容。</p>
+                <p>—— 王老师</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- 支付确认弹窗 -->
+    <div class="modal-overlay" id="modal-payment" onclick="closeModalOnOverlay(event)">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span>💳 支付确认</span>
+                <button class="modal-close" onclick="closeModal('payment')">✕</button>
+            </div>
+            <div class="modal-body">
+                <p id="payment-desc">查看深度报告</p>
+                <div class="payment-amount" id="payment-amount">¥9.9</div>
+                <div class="payment-options">
+                    <button class="pay-btn" onclick="confirmPay()">确认支付</button>
+                    <button class="pay-btn outline" onclick="closeModal('payment')">取消</button>
+                </div>
+                <div class="payment-member-tip">👑 会员可直接查看，<a href="javascript:void(0)" onclick="closeModal('payment');openSubPage('membership')">开通会员</a></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 广告倒计时弹窗 -->
+    <div class="modal-overlay" id="modal-ad" onclick="closeModalOnOverlay(event)">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span>📺 观看广告</span>
+                <button class="modal-close" onclick="closeModal('ad')">✕</button>
+            </div>
+            <div class="modal-body ad-modal-body">
+                <div class="ad-placeholder">
+                    <div class="ad-text">广告内容区域</div>
+                    <div class="ad-brand">灵犀人格舱 · 品牌推广</div>
+                </div>
+                <div class="ad-countdown">
+                    <div class="countdown-circle" id="ad-countdown-circle">30</div>
+                    <div class="countdown-text">秒后可关闭广告</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 隐私设置 -->
+    <div class="modal-overlay" id="modal-privacy" onclick="closeModalOnOverlay(event)">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span>🔒 隐私设置</span>
+                <button class="modal-close" onclick="closeModal('privacy')">✕</button>
+            </div>
+            <div class="modal-body">
+                <div class="privacy-item">
+                    <span>展示测试结果</span>
+                    <label class="toggle-label"><input type="checkbox" class="toggle-switch" checked></label>
+                </div>
+                <div class="privacy-item">
+                    <span>参与排行</span>
+                    <label class="toggle-label"><input type="checkbox" class="toggle-switch" checked></label>
+                </div>
+                <div class="privacy-item">
+                    <span>允许朋友查看</span>
+                    <label class="toggle-label"><input type="checkbox" class="toggle-switch" checked></label>
+                </div>
+                <div class="privacy-item">
+                    <span>允许朋友的朋友转发</span>
+                    <label class="toggle-label"><input type="checkbox" class="toggle-switch"></label>
+                </div>
+                <div class="privacy-item">
+                    <span>免打扰不喜欢测评</span>
+                    <label class="toggle-label"><input type="checkbox" class="toggle-switch"></label>
+                </div>
+                <div class="privacy-item">
+                    <span>减少不喜欢推荐</span>
+                    <label class="toggle-label"><input type="checkbox" class="toggle-switch"></label>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 免责说明 -->
+    <div class="modal-overlay" id="modal-disclaimer" onclick="closeModalOnOverlay(event)">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span>📄 免责说明</span>
+                <button class="modal-close" onclick="closeModal('disclaimer')">✕</button>
+            </div>
+            <div class="modal-body">
+                <p><strong>重要提示：</strong></p>
+                <p>本产品用于生活娱乐、职业探索和轻咨询辅助，不替代专业医疗诊断、心理治疗、法律建议或投资建议。</p>
+                <p>所有测评结果仅供参考，不构成任何专业判断或决策依据。如有心理健康问题，请及时寻求专业帮助。</p>
+                <p>用户应自行判断并承担使用本产品所产生的风险和责任。</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- 隐私说明 -->
+    <div class="modal-overlay" id="modal-privacy-notice" onclick="closeModalOnOverlay(event)">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span>🛡️ 隐私说明</span>
+                <button class="modal-close" onclick="closeModal('privacy-notice')">✕</button>
+            </div>
+            <div class="modal-body">
+                <p>我们重视您的隐私，您可以控制以下内容：</p>
+                <ul class="advice-list">
+                    <li>测试结果是否展示</li>
+                    <li>是否参与排行</li>
+                    <li>是否允许朋友查看</li>
+                    <li>是否允许朋友的朋友转发</li>
+                    <li>可随时关闭授权</li>
+                </ul>
+                <p>您的数据仅用于本产品服务，不会未经授权分享给第三方。</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- 授权书 -->
+    <div class="modal-overlay" id="modal-authorization" onclick="closeModalOnOverlay(event)">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span>📜 授权书</span>
+                <button class="modal-close" onclick="closeModal('authorization')">✕</button>
+            </div>
+            <div class="modal-body">
+                <p><strong>用户授权协议</strong></p>
+                <p>在以下场景中，我们需要获得您的授权：</p>
+                <ul class="advice-list">
+                    <li>邀请朋友测评时，需获得被测评人授权</li>
+                    <li>查看朋友性格时，需获得朋友授权</li>
+                    <li>导入团队资料时，需获得团队成员授权</li>
+                </ul>
+                <p><strong>数据用途：</strong>仅用于本产品测评服务。</p>
+                <p><strong>可见范围：</strong>仅授权范围内的用户可见。</p>
+                <p><strong>撤回方式：</strong>您可在隐私设置中随时撤回授权。</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- 我的订单 -->
+    <div class="modal-overlay" id="modal-my-orders" onclick="closeModalOnOverlay(event)">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span>📦 我的订单</span>
+                <button class="modal-close" onclick="closeModal('my-orders')">✕</button>
+            </div>
+            <div class="modal-body">
+                <div class="order-item">
+                    <div class="order-name clickable" onclick="openHistoryReport('深度性格报告')">深度性格报告</div>
+                    <div class="order-price">¥29.9</div>
+                    <div class="order-status">已完成</div>
+                </div>
+                <div class="order-item">
+                    <div class="order-name">月卡会员</div>
+                    <div class="order-price">¥29.9</div>
+                    <div class="order-status">使用中</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 我的测评记录 -->
+    <div class="modal-overlay" id="modal-my-assessments" onclick="closeModalOnOverlay(event)">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span>📝 我的测评记录</span>
+                <button class="modal-close" onclick="closeModal('my-assessments')">✕</button>
+            </div>
+            <div class="modal-body">
+                <div class="assessment-record">
+                    <div class="record-name">性格测试</div>
+                    <div class="record-score">92分</div>
+                    <div class="record-date">2026-07-03</div>
+                </div>
+                <div class="assessment-record">
+                    <div class="record-name">兴趣分析</div>
+                    <div class="record-score">88分</div>
+                    <div class="record-date">2026-07-01</div>
+                </div>
+                <div class="assessment-record">
+                    <div class="record-name">抗压能力</div>
+                    <div class="record-score">85分</div>
+                    <div class="record-date">2026-06-28</div>
+                </div>
+                <div class="assessment-record">
+                    <div class="record-name">商务测评</div>
+                    <div class="record-score">90分</div>
+                    <div class="record-date">2026-06-25</div>
+                </div>
+                <div class="assessment-record">
+                    <div class="record-name">情商测试</div>
+                    <div class="record-score">98分</div>
+                    <div class="record-date">2026-07-03</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 报告详情弹窗 -->
+    <div class="modal-overlay" id="modal-report-detail" onclick="closeModalOnOverlay(event)">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span id="report-detail-title">报告详情</span>
+                <button class="modal-close" onclick="closeModal('report-detail')">✕</button>
+            </div>
+            <div class="modal-body" id="report-detail-body">
+                <!-- 动态填充 -->
+            </div>
+        </div>
+    </div>
+
+    <!-- 通用提示 Toast -->
+    <div class="toast" id="toast"></div>
+
+    <script src="script.js"></script>
+</body>
+</html>
